@@ -3,8 +3,10 @@ import { Route } from "react-router-dom";
 import { Grid } from "semantic-ui-react";
 // import containers first
 import Counter from './../../containers/Counter';
+import AllTodosList from './../../containers/AllTodosList';
 // import components second
 import Navbar from "./../../components/Navbar";
+
 
 
 class App extends Component {
@@ -17,6 +19,7 @@ class App extends Component {
       >
         <Grid.Column style={{ maxWidth: 700 }}>
           <Navbar />
+          <Route exact path='/alltodos' component={AllTodosList}/>
           <Route exact path='/counter' component={Counter}/>
         </Grid.Column>
       </Grid>
