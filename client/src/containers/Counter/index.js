@@ -49,7 +49,7 @@ function mapStateToProps(state) {
 }
 
 // connect is a higher order component
-// what this wil do is now inside counter component
+// what this will do is now inside counter component
 // i will have access to:
 // this.props.counter
 // this.props.increment
