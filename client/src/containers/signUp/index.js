@@ -8,11 +8,14 @@ import axios from 'axios';
 
 class SignUp extends Component {
 
-  renderEmail = formProps => {
-    console.log(formProps)
+  renderEmail = ({ input, meta }) => {
+    // console.log(input);
+    // console.log(meta);
     return (
       <Form.Input
+        {...input}
         fluid
+        error={ meta.touched && meta.error }
         icon='user'
         iconPosition='left'
         autoComplete='off'
@@ -40,7 +43,25 @@ class SignUp extends Component {
     )
   }
 };
+// formValues can access any field with a name value
+// formValues.email is now accessible
+const asyncValidate = async({ email }) => {
+  try {
+    const { data } = await axios.get('/api/user/emails');
+    const foundEmail = data.some(user => user.email === email);
+    if(foundEmail) {
+      // throw new Error goes automatically to catch block
+      throw new Error();
+    }
+  } catch (error) {
+    throw { email: 'Nice try, but that email is already taken!'}
+  }
+};
 
 // not importing connect
 // using reduxForm for connect
-export default reduxForm({ form: 'SignUp' })(SignUp);
+export default reduxForm({ 
+  form: 'SignUp',
+  asyncValidate,
+  asyncChangeFields: ['email']
+})(SignUp);
