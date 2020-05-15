@@ -24,6 +24,21 @@ class SignUp extends Component {
     )
   }
 
+  renderPassword = ({ input, meta }) => {
+    return (
+      <Form.Input
+        {...input}
+        type='password'
+        fluid
+        error={ meta.touched && meta.error }
+        icon='lock'
+        iconPosition='left'
+        autoComplete='off'
+        placeholder='Password'
+      />
+    )
+  }
+
   render() {
     return (
       <Form size='large'>
@@ -37,6 +52,16 @@ class SignUp extends Component {
               ]
             }
             component={this.renderEmail}
+          />
+          <Field
+            name='password'
+            validate={
+              [
+                required({ msg: 'Password is required!' }),
+                length({ minimum: 6, msg: 'Password must be at least 6 characters long!' })
+              ]
+            }
+            component={this.renderPassword}
           />
         </Segment>
       </Form>
