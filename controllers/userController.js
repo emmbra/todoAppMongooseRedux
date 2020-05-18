@@ -4,7 +4,7 @@ module.exports = {
   getAllUserEmails: async (req, res) => {
     try {
       const userEmails = await User.find({}, 'email');
-      if (!userEmails) { return res.status(404).json({ error: 'No user emails found '});}
+      // if (!userEmails) { return res.status(404).json({ error: 'No user emails found '});}
       return res.status(200).json(userEmails);
     } catch (e) {
       return res.status(403).json({ e });
@@ -48,7 +48,7 @@ module.exports = {
     try {
       const todoToUpdate = await Todo.findById(todoId);
       if (!todoToUpdate) {
-        return res.status(401).json({ error: 'No todo with that Id'});
+        return res.status(401).json({ error: 'No todo with that Id' });
       }
       if (req.user._id.toString() !== todoToUpdate.user.toString()) {
         return res.status(401).json({ error: "You cannot update a todo that's not yours" });
