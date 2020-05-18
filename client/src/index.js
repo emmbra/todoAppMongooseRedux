@@ -16,11 +16,12 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 // creates the store with 3 parameters:
 // 1. all reducers combined into one
-// 2. any state that we want pre-loaded
+// 2. any state that we want pre-loaded on page refresh
 // 3. any middleware we want to use with redux
 const store = createStore(
   reducers,
-  {},
+  // this preloads the user token so on page refresh they stay signed in
+  { auth: { authenticated: localStorage.getItem('token')}},
   composeEnhancers(applyMiddleware(reduxThunk))
 );
 
