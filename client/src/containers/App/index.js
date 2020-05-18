@@ -7,7 +7,7 @@ import AllTodosList from '../AllTodosList';
 // import UserTodoList from '../UserTodoList';
 import SignUp from '../SignUp';
 import SignIn from '../SignIn';
-// import SignOut from '../SignOut';
+import SignOut from '../SignOut';
 import Navbar from './../../components/Navbar';
 class App extends Component {
   render() {
@@ -17,7 +17,7 @@ class App extends Component {
           <Navbar authenticated={this.props.authenticated}/>
           <Route exact path='/' component={SignUp}/>
           <Route exact path='/signin' component={SignIn}/>
-          {/*<Route exact path='/signout' component={SignOut}/>*/}
+          <Route exact path='/signout' component={SignOut}/>
           <Route exact path='/alltodos' component={AllTodosList}/>
           {/*<Route exact path='/usertodos' component={UserTodoList}/>*/}
           <Route exact path='/counter' component={Counter}/>

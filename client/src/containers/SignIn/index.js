@@ -3,35 +3,27 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 import { Form, Segment, Button } from 'semantic-ui-react';
 import { email, required } from 'redux-form-validators';
 import axios from 'axios';
-import { AUTH_USER, AUTH_USER_ERROR } from '../../actions/types'
-
+import { AUTH_USER } from '../../actions/types';
 class SignIn extends Component {
-
-  //when user submits form, send formValues to /api/auth/signin
-  //set the token coming from data into localStorage under the key 'token'
-  //dispatch the action to the reducer to set the token s the state for authentication
-  //redirect the user to the /counter route
-
+  // When the user submits the form, send the formValues to /api/auth/signin
   onSubmit = async (formValues, dispatch) => {
-    // console.log(formValues) = email and password from user submit
     try {
       const { data } = await axios.post('/api/auth/signin', formValues);
-      // console.log(data);
-      // data is the token
-      // make token persist through page refresh
       localStorage.setItem('token', data.token);
-      // dispatch token to set state in authReducer
       dispatch({ type: AUTH_USER, payload: data.token });
-      // on successful signup, redirect user to new page
       this.props.history.push('/counter');
-    } catch (error) {
-      dispatch({ type: AUTH_USER_ERROR, payload: error })
+    } catch (e) {
+      throw new SubmissionError({
+        email: 'Wrong email',
+        password: 'Wrong password',
+        _error: 'Sign in failed!'
+      });
     }
   }
-
+  // set the token coming from data into localStorage under the key 'token'
+  // Dispatch the action to the reducer to set the token as the state for authentication
+  // Redirect the user to the '/counter' route
   renderEmail = ({ input, meta }) => {
-    // console.log(input);
-    // console.log(meta);
     return (
       <Form.Input
         {...input}
@@ -44,7 +36,6 @@ class SignIn extends Component {
       />
     )
   }
-
   renderPassword = ({ input, meta }) => {
     return (
       <Form.Input
@@ -55,23 +46,22 @@ class SignIn extends Component {
         icon='lock'
         iconPosition='left'
         autoComplete='off'
-        placeholder='Password'
+        placeholder='password'
       />
     )
   }
-
   render() {
     const { handleSubmit, invalid, submitting, submitFailed } = this.props;
     return (
-      <Form size='large' onSubmit={handleSubmit(this.onSubmit)} >
+      <Form size='large' onSubmit={handleSubmit(this.onSubmit)}>
         <Segment stacked>
           <Field
             name='email'
             component={this.renderEmail}
             validate={
               [
-                required({ msg: 'Email is required!' }),
-                email({ msg: 'You must provide a valid email address!' })
+                required({ msg: 'Email is required' }),
+                email({ msg: 'You must provide a valid email address' })
               ]
             }
           />
@@ -80,7 +70,7 @@ class SignIn extends Component {
             component={this.renderPassword}
             validate={
               [
-                required({ msg: 'You must provide a password!' })
+                required({ msg: 'You must provide a password' })
               ]
             }
           />
@@ -97,5 +87,4 @@ class SignIn extends Component {
     )
   }
 }
-
-export default reduxForm({ form: 'SignIn' })(SignIn);
+export default reduxForm({ form: 'SignIn '})(SignIn);
