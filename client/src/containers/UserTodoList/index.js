@@ -3,9 +3,10 @@ import { reduxForm, Field } from 'redux-form';
 import { Header, Form, Segment, Message, List, Pagination, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { getUserTodos } from '../../actions/allTodosActions';
+import { getUserTodos, updateCompleteUserTodoById, deleteTodoById } from '../../actions/allTodosActions';
 import { ADD_USER_TODO, ADD_USER_TODO_ERROR } from '../../actions/types';
 import axios from 'axios';
+import requireAuth from './../../hoc/requireAuth';
 import UserTodoListItems from './UserTodoListItems';
 
 class UserTodoList extends Component {
@@ -76,8 +77,13 @@ class UserTodoList extends Component {
             color='teal' 
             content='Add a todo'/>
           </Segment>
-          <List animated divided selection>
-            <UserTodoListItems todos={this.props.userTodos.slice(this.state.start, this.state.end)} />
+        </Form>
+        <List animated divided selection>
+            <UserTodoListItems 
+              todos={this.props.userTodos.slice(this.state.start, this.state.end)} 
+              handleUpdate={this.props.updateCompleteUserTodoById}
+              handleDelete={this.props.deleteTodoById}
+            />
           </List>
           { this.props.userTodos.length === 0 ?
             null
@@ -87,7 +93,6 @@ class UserTodoList extends Component {
               onPageChange={ (event, data) => this.handlePageChange(event, data) }
             />
         }
-        </Form>
       </div>
     );
   }
@@ -100,7 +105,6 @@ function mapStateToProps(state) {
   };
 };
 
-
 // three ways to connect this
 
 // export default reduxForm({ form: 'addTodo' })(connect(mapStateToProps, { getUserTodos })(UserTodoList));
@@ -109,7 +113,9 @@ function mapStateToProps(state) {
 // const composedComponent = connect(mapStateToProps, { getUserTodos })(UserTodoList);
 // export default reduxForm({ form: 'addTodo' })(composedComponent);
 
-export default compose(
+const composedComponent = compose(
   reduxForm({ form: 'addTodo' }),
-  connect(mapStateToProps, { getUserTodos })
+  connect(mapStateToProps, { getUserTodos, updateCompleteUserTodoById, deleteTodoById })
 )(UserTodoList);
+
+export default requireAuth(composedComponent);
